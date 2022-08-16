@@ -39,7 +39,20 @@ const player = new Fighter({
     x: 0,
     y: 0
   },
-  color: 'blue'
+  imageSrc: './img/martialHero3/idle.png',
+  framesMax: 10,
+  scale: 2.5,
+  offset: {x: 0,y: 50},
+  sprites: {
+    idle: {
+      imageSrc: './img/martialHero3/idle.png',
+      framesMax: 10
+    },
+    run: {
+      imageSrc: './img/martialHero3/run.png',
+      framesMax: 8,
+    }
+  }
 })
 
 
@@ -57,7 +70,8 @@ const enemy = new Fighter({
     x: -50,
     y: 0
   },
-  color: 'red'
+  color: 'red',
+  imageSrc: './img/martialHero4/idle.png'
 })
 
 
@@ -93,14 +107,16 @@ function animate() {
   background.update();
   shop.update();
   player.update();
-  enemy.update();
+  //enemy.update();
 
   player.velocity.x = 0;
   enemy.velocity.x = 0;
 
   //player movement
+   player.image= player.sprites.idle.image;
   if (keys.a.pressed && player.lastKey === 'a') {
-    player.velocity.x = -3;
+    player.velocity.x = -5;
+    player.image = player.sprites.run.image;
   } else if (keys.d.pressed && player.lastKey === 'd') {
     player.velocity.x = 3;
   }
