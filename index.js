@@ -16,6 +16,16 @@ const background = new Sprite ({
   imageSrc: './img/background2.jpg'
 })
 
+const shop = new Sprite({
+  position: {
+    x: 715,
+    y: 300
+  },
+  imageSrc: './img/shop.png',
+  scale: 1.5,
+  framesMax: 6
+})
+
 const player = new Fighter({
   position: {
     x: 0,
@@ -81,6 +91,7 @@ function animate() {
   c.fillStyle = 'black';
   c.fillRect(0,0, canvas.width, canvas.height);
   background.update();
+  shop.update();
   player.update();
   enemy.update();
 
@@ -143,7 +154,7 @@ window.addEventListener('keydown', (event) => {
       player.lastKey = 'a';
       break;
     case 'w':
-      if(player.inGround){
+      if(player.inGround && !gameover){
         player.velocity.y = -15;
         player.inGround = false;
       }
@@ -161,7 +172,7 @@ window.addEventListener('keydown', (event) => {
       enemy.lastKey = 'ArrowLeft';
       break;
     case 'ArrowUp':
-      if (enemy.inGround){
+      if (enemy.inGround && !gameover){
         enemy.velocity.y = -15;
         enemy.inGround = false;
       }
