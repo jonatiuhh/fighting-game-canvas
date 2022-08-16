@@ -21,7 +21,7 @@ class Fighter {
   constructor({position, velocity, color, offset}) {
     this.position = position;
     this.velocity = velocity;
-    this.width = 50
+    this.width = 50;
     this.height = 150;
     this.lastKey;
     this.attackBox = {
@@ -35,7 +35,8 @@ class Fighter {
     }
     this.color = color;
     this.isAttacking = false;
-    this.health = 100
+    this.health = 100;
+    this.inGround = false;
   }
 
   draw() {
@@ -57,8 +58,9 @@ class Fighter {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.height + this.velocity.y >= canvas.height){
+    if (this.position.y + this.height + this.velocity.y >= canvas.height - 48){
       this.velocity.y = 0;
+      this.inGround = true;
     }else this.velocity.y += gravity;
   }
     attack() {
