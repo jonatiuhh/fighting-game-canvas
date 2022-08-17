@@ -51,6 +51,18 @@ const player = new Fighter({
     run: {
       imageSrc: './img/martialHero3/run.png',
       framesMax: 8,
+    },
+    jumpUp: {
+      imageSrc: './img/martialHero3/jumpUp.png',
+      framesMax: 3,
+    },
+    jumpDown: {
+      imageSrc: './img/martialHero3/jumpDown.png',
+      framesMax: 3,
+    },
+    attack: {
+      imageSrc: './img/martialHero3/Attack4.png',
+      framesMax: 3,
     }
   }
 })
@@ -113,12 +125,20 @@ function animate() {
   enemy.velocity.x = 0;
 
   //player movement
-   player.image= player.sprites.idle.image;
   if (keys.a.pressed && player.lastKey === 'a') {
     player.velocity.x = -5;
-    player.image = player.sprites.run.image;
+    player.switchSprite('run');
   } else if (keys.d.pressed && player.lastKey === 'd') {
     player.velocity.x = 3;
+    player.switchSprite('run');
+  } else {
+    player.switchSprite('idle');
+  }
+
+  if(player.velocity.y < 0){
+    player.switchSprite('jumpUp');
+  }else if(player.velocity.y > 0 && !player.inGround){
+    player.switchSprite('jumpDown');
   }
 
   //enemy movement
