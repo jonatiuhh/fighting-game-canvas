@@ -28,8 +28,8 @@ const shop = new Sprite({
 
 const player = new Fighter({
   position: {
-    x: 0,
-    y: 0
+    x: 200,
+    y: 500
   }, 
   velocity: {
     x: 0,
@@ -83,22 +83,32 @@ const player = new Fighter({
     attacki: {
       imageSrc: './img/martialHero3/Attack4-i.png',
       framesMax: 3,
+    },
+    Die: {
+      imageSrc: './img/martialHero3/Die.png',
+      framesMax: 11,
+    },
+    Diei: {
+      imageSrc: './img/martialHero3/Die-i.png',
+      framesMax: 11,
+    },
+    TakeHit: {
+      imageSrc: './img/martialHero3/TakeHit.png',
+      framesMax: 3,
+    },
+    TakeHiti: {
+      imageSrc: './img/martialHero3/TakeHit-i.png',
+      framesMax: 3,
     }
     },
   attackBox: {
     offset: {
-      x: -10, 
-      y: 70
+      x: 10, 
+      y: 70,
+      xi: -80,
+      yi: 70
     },
-    width: 140,
-    height: 70
-  },
-  attackBoxi: {
-    offset: {
-      x: -60, 
-      y: 70
-    },
-    width: 140,
+    width: 100,
     height: 70
   }
 })
@@ -107,8 +117,8 @@ const player = new Fighter({
 
 const enemy = new Fighter({
   position: {
-    x: 400,
-    y: 100
+    x: 750,
+    y: 380
   }, 
   velocity: {
     x: 0,
@@ -162,23 +172,33 @@ const enemy = new Fighter({
     attacki: {
       imageSrc: './img/martialHero4/attack-i.png',
       framesMax: 4,
+    },
+    Die: {
+      imageSrc: './img/martialHero4/Die.png',
+      framesMax: 4,
+    },
+    Diei: {
+      imageSrc: './img/martialHero4/Die-i.png',
+      framesMax: 4,
+    },
+    TakeHit: {
+      imageSrc: './img/martialHero4/TakeHit.png',
+      framesMax: 4,
+    },
+    TakeHiti: {
+      imageSrc: './img/martialHero4/TakeHit-i.png',
+      framesMax: 4,
     }
   },
   attackBox: {
     offset: {
-      x: -80, 
-      y: 60
+      x: -85, 
+      y: 70,
+      xi: 37,
+      yi: 70
     },
-    width: 100,
-    height: 60
-  },
-  attackBoxi: {
-    offset: {
-      x: 60, 
-      y: 60
-    },
-    width: 100,
-    height: 60
+    width: 110,
+    height: 50
   }
 })
 
@@ -221,14 +241,14 @@ function animate() {
   enemy.velocity.x = 0;
 
   //player movement
-  if (keys.a.pressed && player.lastKey === 'a') {
+  if (keys.a.pressed && player.lastKey === 'a' && player.position.x >= 0 && !gameover) {
     player.velocity.x = -5;
     if (Originalside(player, enemy)) {
       player.switchSprite('run');
     } else {
       player.switchSprite('run-i');
     }
-  } else if (keys.d.pressed && player.lastKey === 'd') {
+  } else if (keys.d.pressed && player.lastKey === 'd' && player.position.x <= 924 && !gameover) {
     player.velocity.x = 5;
     if (Originalside(player, enemy)) {
       player.switchSprite('run');
@@ -257,14 +277,14 @@ function animate() {
   }
 
   //enemy movement
-  if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+  if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft' && enemy.position.x >= 0 && !gameover) {
     enemy.velocity.x = -5;
         if (Originalside(player, enemy)) {
       enemy.switchSprite('run');
       } else {
       enemy.switchSprite('run-i');
               }}
-  else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+  else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight' && enemy.position.x <= 924 && !gameover) {
     enemy.velocity.x = 5;
         if (Originalside(player, enemy)) {
       enemy.switchSprite('run');
@@ -292,26 +312,35 @@ function animate() {
     } 
   }
 
-  //detection  for collision player
+  //detection  for collision player & enemy gets hit
   if(rectangularColission({
     rectangule1: player, 
     rectangule2: enemy
     }) && 
-    player.isAttacking
-  ) {
+    player.isAttacking && player.frameCurrent === 1
+    ) {
+    enemy.TakeHit();
     player.isAttacking = false;
-    enemy.health -= 5
     document.querySelector("#enemyHealth").style.width = enemy.health + '%';
   }
+  //if player misses
+  if (player.isAttacking && player.frameCurrent === 1){
+    player.isAttacking = false;
+  }
+
+
   // detection of collision enemy
   if(rectangularColission({
     rectangule1: enemy,
     rectangule2: player
-  }) && enemy.isAttacking) {
+  }) && enemy.isAttacking && enemy.frameCurrent === 1) {
+      player.TakeHit();
       enemy.isAttacking = false;
-      player.health -= 5
       document.querySelector('#playerHealth').style.width = player.health + '%';
-     }
+  }
+  if (enemy.isAttacking && enemy.frameCurrent === 1){
+    enemy.isAttacking = false;
+  }
 
      //end game based on health 
      if(enemy.health <= 0 || player.health <= 0){

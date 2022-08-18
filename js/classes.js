@@ -63,7 +63,6 @@ class Fighter extends Sprite {
     offset = {x: 0, y: 0},
     sprites,
     attackBox = { offset: {}, width: undefined, height: undefined}
-
   }) {
     super({
       position,
@@ -84,7 +83,7 @@ class Fighter extends Sprite {
       },
       offset: attackBox.offset,
       width: attackBox.width,
-      height: attackBox.height
+      height: attackBox.height,
     }
     this.color = color;
     this.isAttacking;
@@ -94,6 +93,7 @@ class Fighter extends Sprite {
     this.framesElapsed = 0;
     this.framesHold = 15;
     this.sprites = sprites;
+    this.dead = false;
 
     for(const sprite in this.sprites) {
       sprites[sprite].image = new Image();
@@ -104,14 +104,17 @@ class Fighter extends Sprite {
 
   update(){
     this.draw();
-    this.animatedFrames();
+    if (!this.dead) this.animatedFrames();
 
     //attack boxes
+    if(player.position.x < enemy.position.x){
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
     this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
+     } else {
+       this.attackBox.position.x = this.position.x + this.attackBox.offset.xi;
+       this.attackBox.position.y = this.position.y + this.attackBox.offset.yi;
+     }
     
-    c.fillRect(this.attackBox.position.x, this.attackBox.position.y,this.attackBox.width, this.attackBox.height)
-
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
@@ -123,16 +126,48 @@ class Fighter extends Sprite {
     }else this.velocity.y += gravity;
   }
     attack() {
-      if(!gameover){
       this.isAttacking = true;
-      setTimeout(() =>{
-        this.isAttacking = false;
-      }, 100)
-    }}
+    }
+
+    TakeHit() {
+       if (player.position.x < enemy.position.x){
+          this.health -= 5;
+          if (this.health <= 0){
+            this.switchSprite('Die');
+        } else this.switchSprite('TakeHit');
+     } else {
+          this.health -= 5;
+          if (this.health <= 0){
+            this.switchSprite('Die-i');
+        } else {
+          this.switchSprite('TakeHit-i');
+        }
+      }
+    }
 
     switchSprite(sprite){
-      if (this.image === this.sprites.attack.image && this.frameCurrent < this.sprites.attack.framesMax - 1) {return}
-      else if (this.image === this.sprites.attacki.image && this.frameCurrent < this.sprites.attacki.framesMax - 1) {return}
+      if (this.image === this.sprites.Die.image) {
+        if (this.frameCurrent === this.sprites.Die.framesMax -1)
+        this.dead = true
+        return
+      }
+      if (this.image === this.sprites.Diei.image) {
+        if (this.frameCurrent === this.sprites.Diei.framesMax -1)
+        this.dead = true
+        return
+      }
+
+      if (this.image === this.sprites.attack.image && this.frameCurrent < this.sprites.attack.framesMax - 1) 
+      return
+      
+      if (this.image === this.sprites.attacki.image && this.frameCurrent < this.sprites.attacki.framesMax - 1) 
+      return
+
+      if (this.image === this.sprites.TakeHit.image && this.frameCurrent < this.sprites.TakeHit.framesMax - 1) 
+      return
+
+      if (this.image === this.sprites.TakeHiti.image && this.frameCurrent < this.sprites.TakeHiti.framesMax - 1) 
+      return
       
 
       switch (sprite){
@@ -205,6 +240,34 @@ class Fighter extends Sprite {
             this.framesMax = this.sprites.attacki.framesMax;
             this.frameCurrent = 0;
           }
+          break;
+        case 'TakeHit':
+          if (this.image !== this.sprites.TakeHit.image){
+            this.image = this.sprites.TakeHit.image;
+            this.framesMax = this.sprites.TakeHit.framesMax;
+            this.frameCurrent = 0;
+          }
+          break;
+        case 'TakeHit-i':
+          if (this.image !== this.sprites.TakeHiti.image){
+            this.image =this.sprites.TakeHiti.image;
+            this.framesMax = this.sprites.TakeHiti.framesMax;
+            this.frameCurrent = 0;
+          }
+          break;
+        case 'Die':
+          if (this.image !== this.sprites.Die.image){
+              this.image = this.sprites.Die.image;
+              this.framesMax = this.sprites.Die.framesMax;
+              this.frameCurrent = 0;
+            }
+          break;
+        case 'Die-i':
+          if (this.image !== this.sprites.Diei.image){
+              this.image = this.sprites.Diei.image;
+              this.framesMax = this.sprites.Diei.framesMax;
+              this.frameCurrent = 0;
+            }
           break;
       }
     }

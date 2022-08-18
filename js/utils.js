@@ -21,12 +21,22 @@ function determineWinner({player, enemy}){
     document.querySelector('#timeoff').innerHTML = 'Tie';
   }else if(player.health > enemy.health){
     document.querySelector('#timeoff').innerHTML = 'Player 1 wins';
+    if (player.position.x < enemy.position.x){
+      enemy.switchSprite('Die');
+    } else{
+      enemy.switchSprite('Die-i');
+    }
   }else{
     document.querySelector('#timeoff').innerHTML = 'Player 2 wins';
+    if (player.position.x < enemy.position.x){
+      player.switchSprite('Die');
+    } else{
+      player.switchSprite('Die-i');
+    }
   }
 }
 
-let timer = 90;
+let timer = 30;
 let timerid;
 let gameover = false;
 function decreaseTimer(){ 
