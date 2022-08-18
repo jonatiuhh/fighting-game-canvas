@@ -7,6 +7,12 @@ function rectangularColission({rectangule1, rectangule2}) {
     )
 }
 
+function Originalside(left, right) {
+  if (left.position.x < right.position.x) {
+    return true;
+  } else return false;
+}
+
 function determineWinner({player, enemy}){
   clearTimeout(timerid);
   gameover = true;

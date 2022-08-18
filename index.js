@@ -39,17 +39,17 @@ const player = new Fighter({
     x: 0,
     y: 0
   },
-  imageSrc: './img/martialHero3/idle.png',
+  imageSrc: './img/martialHero3/Idle.png',
   framesMax: 10,
   scale: 2.5,
-  offset: {x: 0,y: 50},
+  offset: {x: 110,y: 50},
   sprites: {
     idle: {
-      imageSrc: './img/martialHero3/idle.png',
+      imageSrc: './img/martialHero3/Idle.png',
       framesMax: 10
     },
     run: {
-      imageSrc: './img/martialHero3/run.png',
+      imageSrc: './img/martialHero3/Run.png',
       framesMax: 8,
     },
     jumpUp: {
@@ -63,7 +63,43 @@ const player = new Fighter({
     attack: {
       imageSrc: './img/martialHero3/Attack4.png',
       framesMax: 3,
+    },
+    idlei: {
+      imageSrc: './img/martialHero3/Idle-i.png',
+      framesMax: 10
+    },
+    runi: {
+      imageSrc: './img/martialHero3/Run-i.png',
+      framesMax: 4,
+    },
+    jumpUpi: {
+      imageSrc: './img/martialHero3/jumpUp-i.png',
+      framesMax: 3,
+    },
+    jumpDowni: {
+      imageSrc: './img/martialHero3/jumpDown-i.png',
+      framesMax: 3,
+    },
+    attacki: {
+      imageSrc: './img/martialHero3/Attack4-i.png',
+      framesMax: 3,
     }
+    },
+  attackBox: {
+    offset: {
+      x: -10, 
+      y: 70
+    },
+    width: 140,
+    height: 70
+  },
+  attackBoxi: {
+    offset: {
+      x: -60, 
+      y: 70
+    },
+    width: 140,
+    height: 70
   }
 })
 
@@ -82,8 +118,68 @@ const enemy = new Fighter({
     x: -50,
     y: 0
   },
-  color: 'red',
-  imageSrc: './img/martialHero4/idle.png'
+  imageSrc: './img/martialHero4/idle.png',
+  framesMax: 10,
+  scale: 3,
+  offset: {x: 70, y: -10},
+  sprites: {
+    idle: {
+      imageSrc: './img/martialHero4/Idle.png',
+      framesMax: 1
+    },
+    run: {
+      imageSrc: './img/martialHero4/Run.png',
+      framesMax: 8,
+    },
+    jumpUp: {
+      imageSrc: './img/martialHero4/jumpUp.png',
+      framesMax: 1,
+    },
+    jumpDown: {
+      imageSrc: './img/martialHero4/jumpDown.png',
+      framesMax: 1,
+    },
+    attack: {
+      imageSrc: './img/martialHero4/attack.png',
+      framesMax: 3,
+    },
+    idlei: {
+      imageSrc: './img/martialHero4/Idle-i.png',
+      framesMax: 1
+    },
+    runi: {
+      imageSrc: './img/martialHero4/Run-i.png',
+      framesMax: 8,
+    },
+    jumpUpi: {
+      imageSrc: './img/martialHero4/jumpUp-i.png',
+      framesMax: 1,
+    },
+    jumpDowni: {
+      imageSrc: './img/martialHero4/jumpDown-i.png',
+      framesMax: 1,
+    },
+    attacki: {
+      imageSrc: './img/martialHero4/attack-i.png',
+      framesMax: 4,
+    }
+  },
+  attackBox: {
+    offset: {
+      x: -80, 
+      y: 60
+    },
+    width: 100,
+    height: 60
+  },
+  attackBoxi: {
+    offset: {
+      x: 60, 
+      y: 60
+    },
+    width: 100,
+    height: 60
+  }
 })
 
 
@@ -119,7 +215,7 @@ function animate() {
   background.update();
   shop.update();
   player.update();
-  //enemy.update();
+  enemy.update();
 
   player.velocity.x = 0;
   enemy.velocity.x = 0;
@@ -127,25 +223,73 @@ function animate() {
   //player movement
   if (keys.a.pressed && player.lastKey === 'a') {
     player.velocity.x = -5;
-    player.switchSprite('run');
+    if (Originalside(player, enemy)) {
+      player.switchSprite('run');
+    } else {
+      player.switchSprite('run-i');
+    }
   } else if (keys.d.pressed && player.lastKey === 'd') {
-    player.velocity.x = 3;
-    player.switchSprite('run');
+    player.velocity.x = 5;
+    if (Originalside(player, enemy)) {
+      player.switchSprite('run');
+    } else {
+      player.switchSprite('run-i');
+    }
   } else {
-    player.switchSprite('idle');
+    if (Originalside(player, enemy)) {
+      player.switchSprite('idle');
+    } else {
+      player.switchSprite('idle-i');
+    }
   }
 
-  if(player.velocity.y < 0){
+  if(player.velocity.y < 0 && Originalside(player, enemy)){
     player.switchSprite('jumpUp');
-  }else if(player.velocity.y > 0 && !player.inGround){
-    player.switchSprite('jumpDown');
+  } else if (player.velocity < 0 && !Originalside(player, enemy)){
+    player.switchSprite('jumpUp-i')
+  }
+  else if(player.velocity.y > 0){
+    if (Originalside(player, enemy)) {
+      player.switchSprite('jumpDown');
+    } else {
+      player.switchSprite('jumpDown-i')
+    } 
   }
 
   //enemy movement
   if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-    enemy.velocity.x = -3;
-  } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-    enemy.velocity.x = 3;
+    enemy.velocity.x = -5;
+        if (Originalside(player, enemy)) {
+      enemy.switchSprite('run');
+      } else {
+      enemy.switchSprite('run-i');
+              }}
+  else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+    enemy.velocity.x = 5;
+        if (Originalside(player, enemy)) {
+      enemy.switchSprite('run');
+      } else {
+      enemy.switchSprite('run-i');
+             } } 
+  else {
+         if (Originalside(player, enemy)) {
+      enemy.switchSprite('idle');
+       } else {
+      enemy.switchSprite('idle-i');
+    }
+  }
+
+  if(enemy.velocity.y < 0 && Originalside(player, enemy)){
+    enemy.switchSprite('jumpUp');
+  } else if (enemy.velocity < 0 && !Originalside(enemy, enemy)){
+    enemy.switchSprite('jumpUp-i')
+  }
+  else if(enemy.velocity.y > 0){
+    if (Originalside(player, enemy)) {
+      enemy.switchSprite('jumpDown');
+    } else {
+      enemy.switchSprite('jumpDown-i')
+    } 
   }
 
   //detection  for collision player
@@ -197,6 +341,11 @@ window.addEventListener('keydown', (event) => {
       break;
     case ' ':
       player.attack();
+      if (Originalside(player, enemy)) {
+        if (!gameover) player.switchSprite('attack');
+      } else {
+        if (!gameover) player.switchSprite('attack-i');
+      }
       break;
 
     case 'ArrowRight':
@@ -215,6 +364,11 @@ window.addEventListener('keydown', (event) => {
       break;
     case 'ArrowDown':
       enemy.attack();
+      if (Originalside(player, enemy)) {
+        if (!gameover) enemy.switchSprite('attack');
+      } else {
+        if (!gameover) enemy.switchSprite('attack-i');
+      }
       break;
   }
 })
