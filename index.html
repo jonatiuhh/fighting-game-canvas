@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fighting Game</title>
+  <title>Fighting Game by@J.Sesma</title>
   <style>
     * {
       box-sizing: border-box;
+      font-family: 'Silkscreen', cursive;
     }
   </style>
 </head>
@@ -24,43 +29,67 @@
         "
      >
      <!-- player health -->
-     <div style="position:relative; height:30px; width: 100%; display:flex;
-     justify-content: flex-end;">
+     <div style="
+              position:relative;  
+              width: 100%; 
+              display:flex;
+              justify-content: flex-end;
+              ">
       <div 
-          style="background-color:rgba(255, 255, 255, 0.322); height:30px; width: 100%"
+          style="
+            background-color:rgba(185, 0, 0, 0.781); 
+            height:31px; 
+            width: 100%"
       ></div>
       <div 
         id="playerHealth" 
-        style="position:absolute; background:blue; top: 0; right: 0; bottom: 0; width: 100%;"></div>
+        style="
+          position:absolute; 
+          background:rgb(103, 156, 255); 
+          top: 0; 
+          right: 0; 
+          bottom: 0; 
+          width: 100%;
+          "
+          ></div>
       </div>
     <!-- timer -->
     <div 
       id="timer"
       style="
-      background-color: red;
+      font-size: 30px;
+      background-color: rgb(19, 16, 16);
       width: 100px;
-      height:100px;
+      height:65px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: rgb(255, 255, 255);
+      border: 2px solid white;
       "
       >10
     </div>
       <!-- enemy health -->
-      <div style="position:relative; height:30px; width: 100%">
+      <div style="
+              position:relative; 
+               
+              width: 100%">
       <div 
-          style="background-color:rgba(255, 255, 255, 0.322); height:30px"
+          style="background-color:rgba(185, 0, 0, 0.781); 
+          height:30px;
+          "
       ></div>
       <div 
         id="enemyHealth" 
         style="
           position:absolute; 
-          background:blue; 
+          background:rgb(103, 156, 255); 
           top: 0; 
           right: 0; 
           bottom: 0; 
           left: 0;
+
           "
           ></div>
       </div>
